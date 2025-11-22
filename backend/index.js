@@ -17,6 +17,32 @@ function ensureStorage() {
         ctaText: 'Get Started',
         imageUrl: ''
       },
+      heroSlides: [
+        {
+          id: 1,
+          src: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80',
+          alt: 'أسر تتلقى الدعم في الميدان',
+          title: 'نصل إلى العائلات الأشد احتياجاً بكرامة',
+          subtitle: 'فرقنا الميدانية تعمل بمعايير سلامة وجودة لتعزيز أثر عطائكم.',
+          href: '#initiatives'
+        },
+        {
+          id: 2,
+          src: 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1600&q=80',
+          alt: 'متطوعون يقدمون خدمات تعليمية',
+          title: 'برامج تعليمية وتمكينية رائدة',
+          subtitle: 'نصمم محتوى يلهم الأطفال والشباب ليصنعوا مستقبلهم.',
+          href: '#programs'
+        },
+        {
+          id: 3,
+          src: 'https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80',
+          alt: 'مياه نقية تصل للقرى',
+          title: 'مشروعات مياه مستدامة',
+          subtitle: 'شبكات مياه وبِنى تحتية تحافظ على صحة الأسر والقرى.',
+          href: '#impact'
+        }
+      ],
       sections: {
         about: {
           heading: 'About',
@@ -31,6 +57,9 @@ function ensureStorage() {
           content: 'Provide ways for visitors to reach you.'
         }
       },
+      initiatives: [],
+      programs: [],
+      messages: [],
       updatedAt: new Date().toISOString()
     };
     fs.writeFileSync(DATA_PATH, JSON.stringify(seed, null, 2));
@@ -40,7 +69,14 @@ function ensureStorage() {
 function loadContent() {
   ensureStorage();
   const raw = fs.readFileSync(DATA_PATH, 'utf-8');
-  return JSON.parse(raw);
+  const parsed = JSON.parse(raw);
+  return {
+    ...parsed,
+    heroSlides: Array.isArray(parsed.heroSlides) ? parsed.heroSlides : [],
+    initiatives: Array.isArray(parsed.initiatives) ? parsed.initiatives : [],
+    programs: Array.isArray(parsed.programs) ? parsed.programs : [],
+    messages: Array.isArray(parsed.messages) ? parsed.messages : []
+  };
 }
 
 function saveContent(content) {
@@ -87,6 +123,15 @@ app.get('/api/dashboard/content', (req, res) => {
   }
 });
 
+app.get('/api/dashboard/messages', (req, res) => {
+  try {
+    const content = loadContent();
+    res.json({ messages: content.messages || [], updatedAt: content.updatedAt });
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to load messages', error: error.message });
+  }
+});
+
 app.put('/api/dashboard/sections', (req, res) => {
   const incoming = req.body || {};
   try {
@@ -105,6 +150,111 @@ app.put('/api/dashboard/sections', (req, res) => {
     res.json(saved);
   } catch (error) {
     res.status(400).json({ message: 'Unable to save updates', error: error.message });
+  }
+});
+
+app.post('/api/dashboard/hero/slides', (req, res) => {
+  const payload = req.body || {};
+  if (!payload.src || !payload.alt) {
+    res.status(400).json({ message: 'Slide image and alternative text are required.' });
+    return;
+  }
+
+  try {
+    const content = loadContent();
+    const slides = Array.isArray(content.heroSlides) ? [...content.heroSlides] : [];
+    const nextId = slides.length ? Math.max(...slides.map((s) => s.id || 0)) + 1 : 1;
+    const newSlide = {
+      id: nextId,
+      title: payload.title || '',
+      subtitle: payload.subtitle || '',
+      href: payload.href || '',
+      src: payload.src,
+      alt: payload.alt
+    };
+
+    const saved = saveContent({ ...content, heroSlides: [...slides, newSlide] });
+    res.json({ slide: newSlide, content: saved });
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to add slide', error: error.message });
+  }
+});
+
+app.post('/api/dashboard/initiatives', (req, res) => {
+  const payload = req.body || {};
+  if (!payload.title || !payload.desc) {
+    res.status(400).json({ message: 'Title and description are required for initiatives.' });
+    return;
+  }
+
+  try {
+    const content = loadContent();
+    const initiatives = Array.isArray(content.initiatives) ? [...content.initiatives] : [];
+    const nextId = initiatives.length ? Math.max(...initiatives.map((i) => i.id || 0)) + 1 : 1;
+    const newInitiative = {
+      id: nextId,
+      tag: payload.tag || 'مبادرة',
+      title: payload.title,
+      desc: payload.desc,
+      amount: payload.amount || ''
+    };
+
+    const saved = saveContent({ ...content, initiatives: [...initiatives, newInitiative] });
+    res.json({ initiative: newInitiative, content: saved });
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to add initiative', error: error.message });
+  }
+});
+
+app.post('/api/dashboard/programs', (req, res) => {
+  const payload = req.body || {};
+  if (!payload.title || !payload.desc) {
+    res.status(400).json({ message: 'Title and description are required for programs.' });
+    return;
+  }
+
+  try {
+    const content = loadContent();
+    const programs = Array.isArray(content.programs) ? [...content.programs] : [];
+    const nextId = programs.length ? Math.max(...programs.map((p) => p.id || 0)) + 1 : 1;
+    const newProgram = {
+      id: nextId,
+      title: payload.title,
+      desc: payload.desc,
+      icon: payload.icon || 'Droplet'
+    };
+
+    const saved = saveContent({ ...content, programs: [...programs, newProgram] });
+    res.json({ program: newProgram, content: saved });
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to add program', error: error.message });
+  }
+});
+
+app.post('/api/dashboard/messages', (req, res) => {
+  const payload = req.body || {};
+  if (!payload.name || !payload.email || !payload.message) {
+    res.status(400).json({ message: 'Name, email, and message are required.' });
+    return;
+  }
+
+  try {
+    const content = loadContent();
+    const messages = Array.isArray(content.messages) ? [...content.messages] : [];
+    const nextId = messages.length ? Math.max(...messages.map((m) => m.id || 0)) + 1 : 1;
+    const newMessage = {
+      id: nextId,
+      name: payload.name,
+      email: payload.email,
+      topic: payload.topic || 'عام',
+      message: payload.message,
+      createdAt: new Date().toISOString()
+    };
+
+    const saved = saveContent({ ...content, messages: [...messages, newMessage] });
+    res.json({ message: 'Message received', entry: newMessage, content: saved });
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to store message', error: error.message });
   }
 });
 
