@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "cd frontend && next dev",
-    "build": "cd frontend && next build",
-    "start": "cd frontend && next start",
+    "prepare:next": "node scripts/prepare-next.js",
+    "dev": "npm run prepare:next && cd frontend && next dev",
+    "build": "npm run prepare:next && cd frontend && next build",
+    "start": "npm run prepare:next && cd frontend && next start",
     "server": "node backend/index.js"
   },
   "dependencies": {
