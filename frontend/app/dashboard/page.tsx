@@ -94,21 +94,14 @@ export default function DashboardPage() {
     }
   };
 
-  const toBase64 = (file: File) =>
-    new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(String(reader.result));
-      reader.onerror = (error) => reject(error);
-    });
-
   const handleHeroUpload = async () => {
     if (!heroUpload) return null;
-    const dataUrl = await toBase64(heroUpload);
-    const res = await fetch(`${API_BASE}/api/dashboard/hero/image`, {
+    const formData = new FormData();
+    formData.append("image", heroUpload);
+
+    const res = await fetch(`${API_BASE}/api/hero/upload-image`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename: heroUpload.name, dataUrl }),
+      body: formData,
     });
 
     if (!res.ok) {
@@ -116,7 +109,7 @@ export default function DashboardPage() {
     }
 
     const data = await res.json();
-    return data.imageUrl as string;
+    return data.url as string;
   };
 
   const submitHeroSlide = async (event: React.FormEvent) => {

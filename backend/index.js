@@ -1,10 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const multer = require('./lib/multer');
 const express = require('./express-lite');
 
 const PORT = process.env.PORT || 4000;
 const DATA_PATH = path.join(__dirname, 'data', 'siteContent.json');
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
+const FRONTEND_PUBLIC_DIR = path.join(__dirname, '..', 'frontend', 'public');
+const UPLOAD_DIR = path.join(FRONTEND_PUBLIC_DIR, 'uploads');
 
 function ensureStorage() {
   fs.mkdirSync(path.dirname(DATA_PATH), { recursive: true });
@@ -15,34 +17,9 @@ function ensureStorage() {
         title: 'Welcome to the site',
         subtitle: 'Edit this hero section from the dashboard.',
         ctaText: 'Get Started',
-        imageUrl: ''
+        heroImage: ''
       },
-      heroSlides: [
-        {
-          id: 1,
-          src: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80',
-          alt: 'أسر تتلقى الدعم في الميدان',
-          title: 'نصل إلى العائلات الأشد احتياجاً بكرامة',
-          subtitle: 'فرقنا الميدانية تعمل بمعايير سلامة وجودة لتعزيز أثر عطائكم.',
-          href: '#initiatives'
-        },
-        {
-          id: 2,
-          src: 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1600&q=80',
-          alt: 'متطوعون يقدمون خدمات تعليمية',
-          title: 'برامج تعليمية وتمكينية رائدة',
-          subtitle: 'نصمم محتوى يلهم الأطفال والشباب ليصنعوا مستقبلهم.',
-          href: '#programs'
-        },
-        {
-          id: 3,
-          src: 'https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80',
-          alt: 'مياه نقية تصل للقرى',
-          title: 'مشروعات مياه مستدامة',
-          subtitle: 'شبكات مياه وبِنى تحتية تحافظ على صحة الأسر والقرى.',
-          href: '#impact'
-        }
-      ],
+      heroSlides: [],
       sections: {
         about: {
           heading: 'About',
@@ -89,14 +66,39 @@ function sanitizeFileName(filename) {
   return filename.replace(/[^a-zA-Z0-9._-]/g, '_');
 }
 
-function decodeDataUrl(dataUrl) {
-  const match = /^data:(image\/(?:png|jpe?g|webp));base64,(.+)$/.exec(dataUrl || '');
-  if (!match) {
-    return null;
+const allowedMimeTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'];
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    ensureStorage();
+    cb(null, UPLOAD_DIR);
+  },
+  filename: (req, file, cb) => {
+    const safeName = sanitizeFileName(file.originalname || 'upload');
+    const ext = path.extname(safeName);
+    const base = ext ? safeName.slice(0, -ext.length) : safeName;
+    const inferredExt =
+      ext ||
+      (file.mimetype === 'image/png'
+        ? '.png'
+        : file.mimetype === 'image/webp'
+          ? '.webp'
+          : '.jpg');
+
+    cb(null, `${Date.now()}-${base}${inferredExt}`);
   }
-  const buffer = Buffer.from(match[2], 'base64');
-  return { mime: match[1], buffer };
-}
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (!allowedMimeTypes.includes(file.mimetype)) {
+      cb(new Error('Only image uploads are allowed (png, jpg, jpeg, webp).'));
+      return;
+    }
+    cb(null, true);
+  }
+});
 
 const app = express();
 
@@ -113,6 +115,19 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use('/uploads', express.static(UPLOAD_DIR));
+
+app.get('/api/hero', (req, res) => {
+  try {
+    const content = loadContent();
+    const hero = content.hero || {};
+    res.json({
+      hero: { ...hero, heroImage: hero.heroImage || hero.imageUrl || '' },
+      heroSlides: content.heroSlides || []
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to load hero data', error: error.message });
+  }
+});
 
 app.get('/api/dashboard/content', (req, res) => {
   try {
@@ -150,6 +165,27 @@ app.put('/api/dashboard/sections', (req, res) => {
     res.json(saved);
   } catch (error) {
     res.status(400).json({ message: 'Unable to save updates', error: error.message });
+  }
+});
+
+app.post('/api/hero/upload-image', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    res.status(400).json({ message: 'A valid image file is required.' });
+    return;
+  }
+
+  try {
+    ensureStorage();
+    const current = loadContent();
+    const publicPath = `/uploads/${req.file.filename}`;
+    const saved = saveContent({
+      ...current,
+      hero: { ...current.hero, heroImage: publicPath, imageUrl: publicPath }
+    });
+
+    res.json({ url: publicPath, hero: saved.hero });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to save hero image', error: error.message });
   }
 });
 
@@ -255,32 +291,6 @@ app.post('/api/dashboard/messages', (req, res) => {
     res.json({ message: 'Message received', entry: newMessage, content: saved });
   } catch (error) {
     res.status(500).json({ message: 'Unable to store message', error: error.message });
-  }
-});
-
-app.post('/api/dashboard/hero/image', (req, res) => {
-  const { filename = 'hero-image', dataUrl } = req.body || {};
-  const decoded = decodeDataUrl(dataUrl);
-  if (!decoded) {
-    res.status(400).json({ message: 'A valid base64 data URL is required.' });
-    return;
-  }
-
-  try {
-    ensureStorage();
-    const safeName = `${Date.now()}-${sanitizeFileName(filename)}`;
-    const extension = decoded.mime.split('/')[1] || 'png';
-    const fileNameWithExt = safeName.endsWith(extension) ? safeName : `${safeName}.${extension}`;
-    const filePath = path.join(UPLOAD_DIR, fileNameWithExt);
-    fs.writeFileSync(filePath, decoded.buffer);
-
-    const current = loadContent();
-    const publicPath = `/uploads/${fileNameWithExt}`;
-    const saved = saveContent({ ...current, hero: { ...current.hero, imageUrl: publicPath } });
-
-    res.json({ imageUrl: publicPath, content: saved });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to save hero image', error: error.message });
   }
 });
 
