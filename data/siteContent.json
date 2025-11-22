@@ -1,0 +1,23 @@
+{
+  "hero": {
+    "title": "Welcome to the site",
+    "subtitle": "Edit this hero section from the dashboard.",
+    "ctaText": "Get Started",
+    "imageUrl": ""
+  },
+  "sections": {
+    "about": {
+      "heading": "About",
+      "content": "Share your story and mission."
+    },
+    "services": {
+      "heading": "Services",
+      "content": "List the main services or initiatives here."
+    },
+    "contact": {
+      "heading": "Contact",
+      "content": "Provide ways for visitors to reach you."
+    }
+  },
+  "updatedAt": ""
+}
