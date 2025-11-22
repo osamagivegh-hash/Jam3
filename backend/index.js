@@ -3,8 +3,8 @@ const path = require('path');
 const express = require('./express-lite');
 
 const PORT = process.env.PORT || 4000;
-const DATA_PATH = path.join(__dirname, '..', 'data', 'siteContent.json');
-const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'uploads');
+const DATA_PATH = path.join(__dirname, 'data', 'siteContent.json');
+const UPLOAD_DIR = path.join(__dirname, 'uploads');
 
 function ensureStorage() {
   fs.mkdirSync(path.dirname(DATA_PATH), { recursive: true });
@@ -76,7 +76,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
+app.use('/uploads', express.static(UPLOAD_DIR));
 
 app.get('/api/dashboard/content', (req, res) => {
   try {
