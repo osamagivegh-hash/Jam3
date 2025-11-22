@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Image as ImageIcon, Inbox, Layers, ListPlus, LogIn, ShieldCheck, Sparkles } from "lucide-react";
 
+// تأكد من أن هذا الرابط يطابق منفذ الباك اند لديك (4100)
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4100";
 
 interface HeroSlideInput {
@@ -94,6 +95,7 @@ export default function DashboardPage() {
     }
   };
 
+  // --- دالة رفع الصور المصححة ---
   const handleHeroUpload = async () => {
     if (!heroUpload) return null;
     const formData = new FormData();
@@ -105,11 +107,13 @@ export default function DashboardPage() {
     });
 
     if (!res.ok) {
-      const errData = await res.json();
+      // محاولة قراءة رسالة الخطأ بأمان
+      const errData = await res.json().catch(() => ({}));
       throw new Error(errData.message || "فشل رفع الصورة");
     }
 
     const data = await res.json();
+    // إرجاع الرابط الكامل القادم من الباك اند
     return data.url as string;
   };
 
@@ -120,6 +124,7 @@ export default function DashboardPage() {
 
     try {
       let finalSrc = heroSlide.src;
+      // إذا تم اختيار ملف، نرفعه أولاً ثم نستخدم الرابط الناتج
       if (heroUpload) {
         finalSrc = (await handleHeroUpload()) || heroSlide.src;
       }
@@ -135,6 +140,7 @@ export default function DashboardPage() {
       }
 
       setStatusMessage("تمت إضافة شريحة الهيرو بنجاح.");
+      // تصفير الحقول بعد النجاح
       setHeroSlide({ src: "", alt: "", title: "", subtitle: "", href: "" });
       setHeroUpload(null);
       await loadContent();
