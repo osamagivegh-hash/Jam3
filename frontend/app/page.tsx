@@ -56,7 +56,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 const defaultHeroSlides: HeroSlide[] = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c",
+    src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80",
     alt: "أسر تتلقى الدعم في الميدان",
     title: "نصل إلى العائلات الأشد احتياجاً بكرامة",
     subtitle: "فرقنا الميدانية تعمل بمعايير سلامة وجودة لتعزيز أثر عطائكم.",
@@ -64,7 +64,7 @@ const defaultHeroSlides: HeroSlide[] = [
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b",
+    src: "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1600&q=80",
     alt: "متطوعون يقدمون خدمات تعليمية",
     title: "برامج تعليمية وتمكينية رائدة",
     subtitle: "نصمم محتوى يلهم الأطفال والشباب ليصنعوا مستقبلهم.",
@@ -72,7 +72,7 @@ const defaultHeroSlides: HeroSlide[] = [
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1514996937319-344454492b37",
+    src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80",
     alt: "مياه نقية تصل للقرى",
     title: "مشروعات مياه مستدامة",
     subtitle: "شبكات مياه وبِنى تحتية تحافظ على صحة الأسر والقرى.",
@@ -80,7 +80,7 @@ const defaultHeroSlides: HeroSlide[] = [
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1517949908110-22fa5f51d36f", // هذه الصورة كانت تسبب الخطأ
+    src: "https://images.unsplash.com/photo-1517949908110-22fa5f51d36f?auto=format&fit=crop&w=1600&q=80",
     alt: "مبادرات طارئة",
     title: "استجابة فورية للحالات الطارئة",
     subtitle: "نعمل بتكامل مع شركائنا لتأمين الغذاء والرعاية الطبية في الوقت المناسب.",
@@ -88,7 +88,7 @@ const defaultHeroSlides: HeroSlide[] = [
   },
   {
     id: 5,
-    src: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b",
+    src: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1600&q=80",
     alt: "شراكات مجتمعية",
     title: "شراكات موثوقة تعزز أثر العطاء",
     subtitle: "حوكمة دقيقة وتقارير شفافة تحافظ على ثقة المانحين.",
@@ -211,12 +211,13 @@ export default function Home() {
 
   const heroSlides = useMemo(() => {
     const slides = content?.heroSlides || [];
-    const formattedSlides = slides.map((slide) => ({
-      ...slide,
-      src: slide.src?.startsWith("http")
-        ? slide.src
-        : `${API_BASE}${slide.src?.startsWith("/") ? "" : "/"}${slide.src ?? ""}`,
-    }));
+    const formattedSlides = slides.map((slide) => {
+      const src = slide.src ?? "";
+      if (!src) return slide;
+      if (src.startsWith("http")) return slide;
+      const normalizedSrc = src.startsWith("/") ? src : `/${src}`;
+      return { ...slide, src: normalizedSrc };
+    });
     return formattedSlides.length ? formattedSlides : defaultHeroSlides;
   }, [content?.heroSlides]);
 

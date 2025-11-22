@@ -3,23 +3,9 @@
     "title": "Welcome to the site",
     "subtitle": "Edit this hero section from the dashboard.",
     "ctaText": "Get Started",
-    "imageUrl": "/uploads/1763808558657-_________-______-_____-____-____-_____.jpg.jpeg"
+    "imageUrl": "/uploads/1763808558657-_________-______-_____-____-____-_____.jpg.jpeg",
+    "heroImage": ""
   },
-  "sections": {
-    "about": {
-      "heading": "About",
-      "content": "Share your story and mission."
-    },
-    "services": {
-      "heading": "Services",
-      "content": "List the main services or initiatives here."
-    },
-    "contact": {
-      "heading": "Contact",
-      "content": "Provide ways for visitors to reach you."
-    }
-  },
-  "updatedAt": "2025-11-22T10:49:18.663Z",
   "heroSlides": [
     {
       "id": 1,
@@ -46,7 +32,22 @@
       "alt": "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
     }
   ],
+  "sections": {
+    "about": {
+      "heading": "About",
+      "content": "Share your story and mission."
+    },
+    "services": {
+      "heading": "Services",
+      "content": "List the main services or initiatives here."
+    },
+    "contact": {
+      "heading": "Contact",
+      "content": "Provide ways for visitors to reach you."
+    }
+  },
   "initiatives": [],
   "programs": [],
-  "messages": []
+  "messages": [],
+  "updatedAt": "2025-11-22T10:49:18.663Z"
 }
