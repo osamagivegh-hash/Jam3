@@ -1,80 +1,48 @@
-const { spawn } = require('child_process');
-const path = require('path');
+const { spawn } = require("child_process");
+const path = require("path");
 
-const mode = process.argv[2] === 'start' ? 'start' : 'dev';
-const frontendScript = mode === 'start' ? 'start:frontend' : 'dev:frontend';
-const rootDir = path.join(__dirname, '..');
-const children = [];
-let shuttingDown = false;
+const mode = process.argv[2] === "start" ? "start" : "dev";
 
-function log(message) {
-  // eslint-disable-next-line no-console
-  console.log(`[orchestrator] ${message}`);
+const rootDir = path.join(__dirname, "..");
+const frontendDir = path.join(rootDir, "frontend");
+
+const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+
+function log(msg) {
+  console.log(`[orchestrator] ${msg}`);
 }
 
-function stopAll(exitCode = 0) {
-  if (shuttingDown) return;
-  shuttingDown = true;
-  children.forEach((child) => {
-    if (!child.killed) {
-      child.kill('SIGTERM');
-    }
+function spawnProc(cmd, args, opts = {}) {
+  const proc = spawn(cmd, args, {
+    stdio: "inherit",
+    shell: true,   // ضروري لحل مشاكل EINVAL في Windows
+    ...opts,
   });
-  setTimeout(() => process.exit(exitCode), 100);
+
+  proc.on("exit", (code) => {
+    if (code !== 0) process.exit(code);
+  });
+
+  return proc;
 }
 
-const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+function start() {
+  log("Preparing Next.js files...");
+  const prepare = spawnProc(npm, ["run", "prepare:next"], { cwd: rootDir });
 
-function spawnProcess(command, args, options = {}) {
-  try {
-    const child = spawn(command, args, {
-      stdio: 'inherit',
-      // Using a shell on Windows breaks argument quoting when the project path
-      // contains spaces or non-Latin characters (e.g. Arabic directories). By
-      // disabling the shell we pass the arguments directly to the process,
-      // ensuring Node receives the full script path instead of a truncated token.
-      shell: false,
-      ...options,
+  prepare.on("exit", (code) => {
+    if (code !== 0) return;
+
+    log("Starting backend server...");
+    spawnProc("node", ["index.js"], {
+      cwd: path.join(rootDir, "backend"),
+      env: { ...process.env, PORT: "4100" },
     });
 
-    child.on('close', (code) => {
-      if (!shuttingDown && code !== 0) {
-        log(`${command} exited with code ${code}`);
-        stopAll(code || 1);
-      }
-    });
-
-    children.push(child);
-    return child;
-  } catch (error) {
-    // In some Windows environments (particularly when the project resides in
-    // a path with non-Latin characters), spawning without a shell can throw
-    // EINVAL before the process starts. As a fallback, retry with a shell so
-    // the command can be resolved correctly.
-    if (process.platform === 'win32' && error.code === 'EINVAL' && options.shell !== true) {
-      return spawnProcess(command, args, { ...options, shell: true });
-    }
-    throw error;
-  }
+    log(`Starting frontend (${mode})...`);
+    const script = mode === "start" ? "start:frontend" : "dev:frontend";
+    spawnProc(npm, ["run", script], { cwd: frontendDir });
+  });
 }
 
-function startServices() {
-  log('Starting backend server...');
-  spawnProcess('node', [path.join(rootDir, 'backend', 'index.js')]);
-
-  log(`Starting frontend (${mode})...`);
-  spawnProcess(npmCommand, ['run', frontendScript], { cwd: rootDir });
-}
-
-log('Preparing Next.js files...');
-const prepare = spawnProcess(npmCommand, ['run', 'prepare:next'], { cwd: rootDir });
-prepare.on('close', (code) => {
-  if (code === 0 && !shuttingDown) {
-    startServices();
-  } else {
-    stopAll(code || 1);
-  }
-});
-
-process.on('SIGINT', () => stopAll());
-process.on('SIGTERM', () => stopAll());
+start();

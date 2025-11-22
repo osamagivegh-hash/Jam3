@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "prepare:next": "node scripts/prepare-next.js",
+
     "dev": "node scripts/run-app.js dev",
     "start": "node scripts/run-app.js start",
-    "dev:frontend": "npm run prepare:next && cd frontend && next dev",
-    "start:frontend": "npm run prepare:next && cd frontend && next start",
-    "build": "npm run prepare:next && cd frontend && next build",
+
+    "dev:frontend": "next dev",
+    "start:frontend": "next start",
+
+    "build": "cd frontend && next build",
     "server": "node backend/index.js"
   },
   "dependencies": {
