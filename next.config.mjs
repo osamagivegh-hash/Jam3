@@ -5,18 +5,20 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "almawaddah.org.sa",
+        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "source.unsplash.com",
+        pathname: "/**",
       },
     ],
   },
 };
 
 export default nextConfig;
-

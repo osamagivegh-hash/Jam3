@@ -28,6 +28,8 @@
   height: 100%;
   will-change: transform;
   transition: transform 0.9s ease;
+  /* تعديل هام: جعل اتجاه الاصطفاف من اليسار لليمين لضمان عمل السلايدر بشكل صحيح */
+  direction: ltr;
 }
 
 .hero__item,
@@ -36,14 +38,19 @@
   flex: 0 0 auto;
   width: 100%;
   height: 100%;
-  opacity: 1;
+  /* تعديل هام: الشفافية 1 لتظهر الصور المخفية */
+  opacity: 1; 
   transition: opacity 0.9s ease;
   isolation: isolate;
-  pointer-events: none;
+  /* إعادة اتجاه النصوص للعربية داخل الشريحة */
+  direction: rtl;
+  /* تم تفعيل التفاعل (النقر) دائماً لأن الصور ظاهرة */
+  pointer-events: auto; 
 }
 
+/* تم إزالة كود الإخفاء السابق لأننا نعتمد على الانزلاق */
 .hero__item.is-active {
-  pointer-events: auto;
+  z-index: 2;
 }
 
 .hero__image-layer {
@@ -121,6 +128,8 @@
   inset: 0;
   pointer-events: none;
   z-index: 3;
+  /* لضمان ظهور الأسهم بشكل صحيح مع اتجاه LTR للشريط */
+  direction: ltr; 
 }
 
 .hero__arrow {
@@ -146,8 +155,8 @@
 }
 
 .hero__arrow--prev {
-  right: auto;
   left: 1.5rem;
+  right: auto;
 }
 
 .hero__arrow--next {
@@ -164,6 +173,7 @@
   gap: 10px;
   z-index: 3;
   pointer-events: auto;
+  direction: ltr; /* لضمان ترتيب النقاط بشكل صحيح */
 }
 
 .hero__indicator {
@@ -174,6 +184,7 @@
   border: 2px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
   transition: all 0.25s ease;
+  cursor: pointer;
 }
 
 .hero__indicator.is-active {
@@ -190,6 +201,7 @@
   height: 120px;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,64L120,74.7C240,85,480,107,720,133.3C960,160,1200,192,1320,208L1440,224L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") center bottom / cover no-repeat;
   z-index: 2;
+  pointer-events: none;
 }
 
 .hero__link {
@@ -231,14 +243,6 @@
   .hero__content {
     justify-content: center;
     text-align: center;
-  }
-
-  .hero__arrow--prev {
-    left: 1rem;
-  }
-
-  .hero__arrow--next {
-    right: 1rem;
   }
 }
 
