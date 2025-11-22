@@ -26,7 +26,11 @@ function stopAll(exitCode = 0) {
 function spawnProcess(command, args, options = {}) {
   const child = spawn(command, args, {
     stdio: 'inherit',
-    shell: process.platform === 'win32',
+    // Using a shell on Windows breaks argument quoting when the project path
+    // contains spaces or non-Latin characters (e.g. Arabic directories). By
+    // disabling the shell we pass the arguments directly to the process,
+    // ensuring Node receives the full script path instead of a truncated token.
+    shell: false,
     ...options,
   });
 
