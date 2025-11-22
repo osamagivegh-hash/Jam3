@@ -44,6 +44,21 @@ function express() {
 
     let idx = -1;
 
+    const stack = [];
+
+    middlewares.forEach(({ path: basePath, fn }) => {
+      if (!basePath || matchPath(req.path, basePath)) {
+        stack.push(fn);
+      }
+    });
+
+    const route = routes.find((r) => r.method === req.method && r.path === req.path);
+    if (route && route.handlers.length) {
+      stack.push(...route.handlers);
+    } else {
+      stack.push((req, res) => res.status(404).json({ message: 'Not Found' }));
+    }
+
     const run = (error) => {
       idx += 1;
       if (error) {
@@ -51,25 +66,16 @@ function express() {
         return;
       }
 
-      if (idx < middlewares.length) {
-        const { path: basePath, fn } = middlewares[idx];
-        if (!basePath || matchPath(req.path, basePath)) {
-          return fn(req, res, run);
-        }
-        return run();
-      }
+      if (idx >= stack.length) return;
 
-      const route = routes.find((r) => r.method === req.method && r.path === req.path);
-      if (route) {
-        try {
-          return route.handler(req, res);
-        } catch (err) {
-          res.status(500).json({ message: err.message || 'Server error' });
-          return;
+      try {
+        const maybePromise = stack[idx](req, res, (nextErr) => run(nextErr));
+        if (maybePromise && typeof maybePromise.then === 'function') {
+          maybePromise.catch((nextErr) => run(nextErr));
         }
+      } catch (err) {
+        run(err);
       }
-
-      res.status(404).json({ message: 'Not Found' });
     };
 
     run();
@@ -84,8 +90,8 @@ function express() {
   };
 
   ['GET', 'POST', 'PUT', 'DELETE'].forEach((method) => {
-    app[method.toLowerCase()] = (routePath, handler) => {
-      routes.push({ method, path: routePath, handler });
+    app[method.toLowerCase()] = (routePath, ...handlers) => {
+      routes.push({ method, path: routePath, handlers });
     };
   });
 
