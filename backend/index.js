@@ -284,8 +284,21 @@ app.post('/api/dashboard/hero/image', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   ensureStorage();
   // eslint-disable-next-line no-console
   console.log(`Dashboard backend running on http://localhost:${PORT}`);
+});
+
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    // eslint-disable-next-line no-console
+    console.error(
+      `Port ${PORT} is already in use. Stop the process using that port or set PORT to a free port (e.g. PORT=4100).`
+    );
+  } else {
+    // eslint-disable-next-line no-console
+    console.error('Server failed to start:', error.message || error);
+  }
+  process.exit(1);
 });
