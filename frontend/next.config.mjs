@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [], // لا نحتاج أي دومينات خارجية لأن الصور الآن محلية من /public/uploads
+    domains: ["images.unsplash.com"], // السماح بتحميل صور Unsplash المستخدمة في الصفحة الرئيسية
   },
 };
 
