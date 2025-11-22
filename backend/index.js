@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const multer = require('./lib/multer');
+const multer = require('multer');
 const express = require('./express-lite');
 
 //////////////////////////////////////////////////////////
@@ -12,8 +12,7 @@ const PORT = process.env.PORT || 4100;
 //  🔧 المسارات الأساسية
 //////////////////////////////////////////////////////////
 const DATA_PATH = path.join(__dirname, 'data', 'siteContent.json');
-const FRONTEND_PUBLIC_DIR = path.join(__dirname, '..', 'frontend', 'public');
-const UPLOAD_DIR = path.join(FRONTEND_PUBLIC_DIR, 'uploads');
+const UPLOAD_DIR = path.join(__dirname, 'uploads');
 
 //////////////////////////////////////////////////////////
 //  🗂 إنشاء المجلدات الأساسية عند الحاجة
@@ -72,6 +71,12 @@ function saveContent(content) {
   return payload;
 }
 
+function buildFileUrl(req, filename) {
+  const protocol = req.headers['x-forwarded-proto'] || 'http';
+  const host = req.headers.host || `localhost:${PORT}`;
+  return `${protocol}://${host}/uploads/${filename}`;
+}
+
 //////////////////////////////////////////////////////////
 //  🧹 تنظيف أسماء الملفات
 //////////////////////////////////////////////////////////
@@ -108,6 +113,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (!allowedMimeTypes.includes(file.mimetype)) {
       cb(new Error('Only image uploads are allowed (png, jpg, jpeg, webp).'));
@@ -134,7 +140,29 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use('/uploads', express.static(UPLOAD_DIR));
+app.use('/uploads', (req, res, next) => {
+  if (!['GET', 'HEAD'].includes(req.method)) return next();
+
+  const relativePath = req.path.replace(/^\/uploads\/?/, '');
+  if (!relativePath) return next();
+
+  const filePath = path.join(UPLOAD_DIR, relativePath);
+  if (!filePath.startsWith(UPLOAD_DIR)) {
+    res.status(403).json({ message: 'Forbidden' });
+    return;
+  }
+
+  fs.stat(filePath, (err, stats) => {
+    if (err || !stats.isFile()) {
+      res.status(404).json({ message: 'File not found' });
+      return;
+    }
+
+    const stream = fs.createReadStream(filePath);
+    stream.on('error', () => res.status(500).json({ message: 'File stream error' }));
+    stream.pipe(res);
+  });
+});
 
 //////////////////////////////////////////////////////////
 //  📌 API — بيانات الهيرو + الشرائح
@@ -206,14 +234,14 @@ app.post('/api/hero/upload-image', upload.single('image'), (req, res) => {
 
   try {
     const content = loadContent();
-    const publicPath = `/uploads/${req.file.filename}`;
+    const fullUrl = buildFileUrl(req, req.file.filename);
 
     const saved = saveContent({
       ...content,
-      hero: { ...content.hero, heroImage: publicPath, imageUrl: publicPath }
+      hero: { ...content.hero, heroImage: fullUrl, imageUrl: fullUrl }
     });
 
-    res.json({ url: publicPath, hero: saved.hero });
+    res.json({ url: fullUrl, hero: saved.hero });
   } catch (error) {
     res.status(500).json({ message: 'Failed to save hero image', error: error.message });
   }

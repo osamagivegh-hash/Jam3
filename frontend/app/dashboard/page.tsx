@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Image as ImageIcon, Inbox, Layers, ListPlus, LogIn, ShieldCheck, Sparkles } from "lucide-react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4100";
 
 interface HeroSlideInput {
   title?: string;
@@ -105,7 +105,8 @@ export default function DashboardPage() {
     });
 
     if (!res.ok) {
-      throw new Error("فشل رفع الصورة");
+      const errData = await res.json();
+      throw new Error(errData.message || "فشل رفع الصورة");
     }
 
     const data = await res.json();
