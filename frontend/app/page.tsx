@@ -211,7 +211,13 @@ export default function Home() {
 
   const heroSlides = useMemo(() => {
     const slides = content?.heroSlides || [];
-    return slides.length ? slides : defaultHeroSlides;
+    const formattedSlides = slides.map((slide) => ({
+      ...slide,
+      src: slide.src?.startsWith("http")
+        ? slide.src
+        : `${API_BASE}${slide.src?.startsWith("/") ? "" : "/"}${slide.src ?? ""}`,
+    }));
+    return formattedSlides.length ? formattedSlides : defaultHeroSlides;
   }, [content?.heroSlides]);
 
   const initiativeCards = useMemo(() => {
