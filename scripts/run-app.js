@@ -26,25 +26,36 @@ function stopAll(exitCode = 0) {
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 function spawnProcess(command, args, options = {}) {
-  const child = spawn(command, args, {
-    stdio: 'inherit',
-    // Using a shell on Windows breaks argument quoting when the project path
-    // contains spaces or non-Latin characters (e.g. Arabic directories). By
-    // disabling the shell we pass the arguments directly to the process,
-    // ensuring Node receives the full script path instead of a truncated token.
-    shell: false,
-    ...options,
-  });
+  try {
+    const child = spawn(command, args, {
+      stdio: 'inherit',
+      // Using a shell on Windows breaks argument quoting when the project path
+      // contains spaces or non-Latin characters (e.g. Arabic directories). By
+      // disabling the shell we pass the arguments directly to the process,
+      // ensuring Node receives the full script path instead of a truncated token.
+      shell: false,
+      ...options,
+    });
 
-  child.on('close', (code) => {
-    if (!shuttingDown && code !== 0) {
-      log(`${command} exited with code ${code}`);
-      stopAll(code || 1);
+    child.on('close', (code) => {
+      if (!shuttingDown && code !== 0) {
+        log(`${command} exited with code ${code}`);
+        stopAll(code || 1);
+      }
+    });
+
+    children.push(child);
+    return child;
+  } catch (error) {
+    // In some Windows environments (particularly when the project resides in
+    // a path with non-Latin characters), spawning without a shell can throw
+    // EINVAL before the process starts. As a fallback, retry with a shell so
+    // the command can be resolved correctly.
+    if (process.platform === 'win32' && error.code === 'EINVAL' && options.shell !== true) {
+      return spawnProcess(command, args, { ...options, shell: true });
     }
-  });
-
-  children.push(child);
-  return child;
+    throw error;
+  }
 }
 
 function startServices() {
