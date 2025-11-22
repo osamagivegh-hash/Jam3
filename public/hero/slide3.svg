@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-label="طلاب يتلقون تعليمًا نوعيًا">
+  <defs>
+    <linearGradient id="g31" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="g32" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a5b4fc" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#c7d2fe" stop-opacity="0.05" />
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#g31)" />
+  <rect width="1440" height="900" fill="url(#g32)" />
+  <g fill="#c7d2fe" opacity="0.35">
+    <circle cx="260" cy="320" r="90" />
+    <circle cx="420" cy="420" r="70" />
+    <circle cx="340" cy="540" r="60" />
+  </g>
+  <g fill="#312e81" opacity="0.5">
+    <circle cx="980" cy="300" r="120" />
+    <circle cx="1160" cy="360" r="90" />
+  </g>
+  <path d="M0 760 C320 700 520 820 840 760 C1120 710 1280 830 1440 790 L1440 900 L0 900 Z" fill="#6366f1" opacity="0.45" />
+  <text x="1240" y="160" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="52" fill="#eef2ff" font-weight="700" text-anchor="end">برامج تعليمية تمكّن الجيل</text>
+  <text x="1240" y="220" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="28" fill="#c7d2fe" font-weight="500" text-anchor="end">صورة افتراضية لاختبار قسم الأبطال</text>
+</svg>

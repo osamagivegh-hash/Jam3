@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #0fa3b1;
+  --color-primary-dark: #0c7c86;
+  --color-accent: #f5b312;
+  --color-soft: #f1f9f9;
+  --color-muted: #e6f3f4;
+  --color-text: #0f172a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-[var(--color-soft)] text-[var(--color-text)] font-tajawal antialiased;
+  direction: rtl;
+}
+
+.section {
+  @apply py-20;
+  scroll-margin-top: 96px;
+}
+
+.section-title {
+  @apply text-4xl font-extrabold text-[var(--color-primary-dark)] mb-4 text-center;
+}
+
+.section-sub {
+  @apply text-slate-600 max-w-3xl mx-auto text-center mb-10 leading-relaxed;
+}
+
+.wave-divider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 80px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,224L120,234.7C240,245,480,267,720,245.3C960,224,1200,160,1320,128L1440,96L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") center bottom / cover no-repeat;
+}
+
+.rounded-card {
+  @apply rounded-3xl border border-slate-200 shadow-lg;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold shadow-md transition;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold border;
+  border-color: rgba(15, 163, 177, 0.2);
+  color: var(--color-primary-dark);
+  background: white;
+}
+
+.btn-outline:hover {
+  background: var(--color-muted);
+}
+
+.stat-pill {
+  @apply flex flex-col gap-1 rounded-2xl px-4 py-3 text-center border bg-white shadow-sm;
+  border-color: rgba(15, 163, 177, 0.12);
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+  background: rgba(15, 163, 177, 0.12);
+  color: var(--color-primary-dark);
+}
+
+.card-hover {
+  @apply transition duration-200;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 35px rgba(12, 124, 134, 0.12);
+}
+
+.contact-input {
+  @apply w-full rounded-2xl border px-4 py-3 text-sm bg-white shadow-sm;
+  border-color: rgba(15, 163, 177, 0.2);
+}
+
+.contact-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 163, 177, 0.15);
+}

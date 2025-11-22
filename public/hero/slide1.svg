@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-label="عائلة تستفيد من مشاريع المياه">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.05" />
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#g1)" />
+  <circle cx="420" cy="280" r="210" fill="url(#g2)" />
+  <circle cx="1060" cy="640" r="260" fill="url(#g2)" />
+  <path d="M0 660 C320 560 540 700 860 630 C1150 570 1240 720 1440 660 L1440 900 L0 900 Z" fill="#0ea5e9" opacity="0.35" />
+  <path d="M0 720 C360 640 520 780 880 720 C1170 680 1270 810 1440 760 L1440 900 L0 900 Z" fill="#38bdf8" opacity="0.25" />
+  <text x="1120" y="220" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="56" fill="#f8fafc" font-weight="700" text-anchor="end">مياه نظيفة تحفظ الكرامة</text>
+  <text x="1120" y="280" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="30" fill="#e0f2fe" font-weight="500" text-anchor="end">حافظ على تدفق العطاء للقرى المحتاجة</text>
+</svg>

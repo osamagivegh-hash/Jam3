@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-label="قرية تنعم ببنية تحتية جديدة للمياه">
+  <defs>
+    <linearGradient id="g51" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f472b6" />
+      <stop offset="100%" stop-color="#881337" />
+    </linearGradient>
+    <radialGradient id="g52" cx="80%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="#fecdd3" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#fecdd3" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#g51)" />
+  <rect width="1440" height="900" fill="url(#g52)" />
+  <path d="M0 240 C260 320 520 180 800 260 C1100 340 1260 220 1440 260 L1440 0 L0 0 Z" fill="#f9a8d4" opacity="0.3" />
+  <path d="M0 760 C260 700 460 820 760 760 C1080 700 1240 840 1440 780 L1440 900 L0 900 Z" fill="#e11d48" opacity="0.35" />
+  <text x="1240" y="740" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="52" fill="#fff1f2" font-weight="700" text-anchor="end">بنية تحتية تعيد الحياة</text>
+  <text x="1240" y="800" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="28" fill="#ffe4e6" font-weight="500" text-anchor="end">صورة افتراضية لاختبار شريط الأبطال</text>
+</svg>

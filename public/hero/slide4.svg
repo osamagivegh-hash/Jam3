@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-label="متطوعون يحضّرون السلال الإغاثية">
+  <defs>
+    <linearGradient id="g41" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#064e3b" />
+    </linearGradient>
+    <radialGradient id="g42" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#a7f3d0" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#a7f3d0" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#g41)" />
+  <rect width="1440" height="900" fill="url(#g42)" />
+  <path d="M0 560 C300 520 520 620 800 580 C1080 540 1260 620 1440 600 L1440 900 L0 900 Z" fill="#34d399" opacity="0.35" />
+  <path d="M0 700 C320 640 520 780 860 720 C1160 660 1240 800 1440 740 L1440 900 L0 900 Z" fill="#10b981" opacity="0.25" />
+  <text x="180" y="200" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="54" fill="#ecfdf3" font-weight="700">جاهزة لتوثيق حملات الإغاثة</text>
+  <text x="180" y="260" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="28" fill="#d1fae5" font-weight="500">يمكنك استبدالها بصورك فور توفرها</text>
+</svg>

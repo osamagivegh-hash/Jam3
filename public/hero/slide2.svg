@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-label="متطوعون يقدّمون مساعدات غذائية">
+  <defs>
+    <linearGradient id="g21" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#7c2d12" />
+    </linearGradient>
+    <radialGradient id="g22" cx="60%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#fdba74" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#fdba74" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#g21)" />
+  <rect width="1440" height="900" fill="url(#g22)" />
+  <path d="M0 180 C220 260 360 200 560 280 C760 360 920 230 1180 300 C1340 340 1440 280 1440 280 L1440 0 L0 0 Z" fill="#fb923c" opacity="0.2" />
+  <path d="M0 620 C240 540 420 690 700 650 C960 610 1180 760 1440 670 L1440 900 L0 900 Z" fill="#fdba74" opacity="0.35" />
+  <text x="200" y="780" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="56" fill="#fff7ed" font-weight="700">سلال غذائية تصل للأسر</text>
+  <text x="200" y="840" font-family="'Noto Sans Arabic', 'Arial', sans-serif" font-size="30" fill="#ffedd5" font-weight="500">خلفية جاهزة لاختبار قسم التبرع</text>
+</svg>
