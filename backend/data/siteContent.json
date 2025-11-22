@@ -3,7 +3,7 @@
     "title": "Welcome to the site",
     "subtitle": "Edit this hero section from the dashboard.",
     "ctaText": "Get Started",
-    "imageUrl": ""
+    "imageUrl": "/uploads/1763808558657-_________-______-_____-____-____-_____.jpg.jpeg"
   },
   "sections": {
     "about": {
@@ -19,5 +19,34 @@
       "content": "Provide ways for visitors to reach you."
     }
   },
-  "updatedAt": ""
+  "updatedAt": "2025-11-22T10:49:18.663Z",
+  "heroSlides": [
+    {
+      "id": 1,
+      "title": "wwwwww",
+      "subtitle": "sssssss",
+      "href": "",
+      "src": "/uploads/1763808524686-OIP__3_.webp",
+      "alt": "ddddddddddddddddddd"
+    },
+    {
+      "id": 2,
+      "title": "rffffff",
+      "subtitle": "yyyyyyyyyyyy",
+      "href": "",
+      "src": "/uploads/1763808543963-OIP__4_.webp",
+      "alt": "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
+    },
+    {
+      "id": 3,
+      "title": "ttttttt",
+      "subtitle": "uuuuuuuu",
+      "href": "",
+      "src": "/uploads/1763808558657-_________-______-_____-____-____-_____.jpg.jpeg",
+      "alt": "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+    }
+  ],
+  "initiatives": [],
+  "programs": [],
+  "messages": []
 }
