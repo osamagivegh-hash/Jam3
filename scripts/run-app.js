@@ -4,7 +4,6 @@ const path = require("path");
 const mode = process.argv[2] === "start" ? "start" : "dev";
 
 const rootDir = path.join(__dirname, "..");
-const frontendDir = path.join(rootDir, "frontend");
 
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 
@@ -41,7 +40,7 @@ function start() {
 
     log(`Starting frontend (${mode})...`);
     const script = mode === "start" ? "start:frontend" : "dev:frontend";
-    spawnProc(npm, ["run", script], { cwd: frontendDir });
+    spawnProc(npm, ["run", script], { cwd: rootDir });
   });
 }
 

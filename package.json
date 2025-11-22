@@ -8,8 +8,8 @@
     "dev": "node scripts/run-app.js dev",
     "start": "node scripts/run-app.js start",
 
-    "dev:frontend": "next dev",
-    "start:frontend": "next start",
+    "dev:frontend": "next dev frontend",
+    "start:frontend": "next start frontend",
 
     "build": "cd frontend && next build",
     "server": "node backend/index.js"
