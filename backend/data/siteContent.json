@@ -3,8 +3,9 @@
     "title": "Welcome to the site",
     "subtitle": "Edit this hero section from the dashboard.",
     "ctaText": "Get Started",
-    "imageUrl": ""
+    "heroImage": ""
   },
+  "heroSlides": [],
   "sections": {
     "about": {
       "heading": "About",
@@ -19,5 +20,8 @@
       "content": "Provide ways for visitors to reach you."
     }
   },
+  "initiatives": [],
+  "programs": [],
+  "messages": [],
   "updatedAt": ""
 }
