@@ -43,7 +43,7 @@ interface AboutHighlight {
 const heroSlides: HeroSlide[] = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
+    src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80",
     alt: "أسر تتلقى الدعم في الميدان",
     title: "نصل إلى العائلات الأشد احتياجاً بكرامة",
     subtitle: "فرقنا الميدانية تعمل بمعايير سلامة وجودة لتعزيز أثر عطائكم.",
@@ -51,7 +51,7 @@ const heroSlides: HeroSlide[] = [
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1600&q=80",
+    src: "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1600&q=80",
     alt: "متطوعون يقدمون خدمات تعليمية",
     title: "برامج تعليمية وتمكينية رائدة",
     subtitle: "نصمم محتوى يلهم الأطفال والشباب ليصنعوا مستقبلهم.",
@@ -59,7 +59,7 @@ const heroSlides: HeroSlide[] = [
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1509099836639-18ba02e2e2c3?auto=format&fit=crop&w=1600&q=80",
+    src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1600&q=80",
     alt: "مياه نقية تصل للقرى",
     title: "مشروعات مياه مستدامة",
     subtitle: "شبكات مياه وبِنى تحتية تحافظ على صحة الأسر والقرى.",
@@ -67,7 +67,7 @@ const heroSlides: HeroSlide[] = [
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=1600&q=80",
+    src: "https://images.unsplash.com/photo-1517949908110-22fa5f51d36f?auto=format&fit=crop&w=1600&q=80",
     alt: "مبادرات طارئة",
     title: "استجابة فورية للحالات الطارئة",
     subtitle: "نعمل بتكامل مع شركائنا لتأمين الغذاء والرعاية الطبية في الوقت المناسب.",
@@ -75,7 +75,7 @@ const heroSlides: HeroSlide[] = [
   },
   {
     id: 5,
-    src: "https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1600&q=80",
+    src: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1600&q=80",
     alt: "شراكات مجتمعية",
     title: "شراكات موثوقة تعزز أثر العطاء",
     subtitle: "حوكمة دقيقة وتقارير شفافة تحافظ على ثقة المانحين.",
