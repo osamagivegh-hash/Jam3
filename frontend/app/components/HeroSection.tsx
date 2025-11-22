@@ -125,7 +125,7 @@ export default function HeroSection({ slides, intervalMs = DEFAULT_INTERVAL }: H
                       fill
                       priority={index === 0}
                       sizes="100vw"
-                      style={{ objectFit: "cover" }}
+                      className="object-cover"
                     />
                   </div>
                   <div className="hero__veil" aria-hidden />
