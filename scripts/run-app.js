@@ -23,6 +23,8 @@ function stopAll(exitCode = 0) {
   setTimeout(() => process.exit(exitCode), 100);
 }
 
+const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+
 function spawnProcess(command, args, options = {}) {
   const child = spawn(command, args, {
     stdio: 'inherit',
@@ -50,11 +52,11 @@ function startServices() {
   spawnProcess('node', [path.join(rootDir, 'backend', 'index.js')]);
 
   log(`Starting frontend (${mode})...`);
-  spawnProcess('npm', ['run', frontendScript], { cwd: rootDir });
+  spawnProcess(npmCommand, ['run', frontendScript], { cwd: rootDir });
 }
 
 log('Preparing Next.js files...');
-const prepare = spawnProcess('npm', ['run', 'prepare:next'], { cwd: rootDir });
+const prepare = spawnProcess(npmCommand, ['run', 'prepare:next'], { cwd: rootDir });
 prepare.on('close', (code) => {
   if (code === 0 && !shuttingDown) {
     startServices();
