@@ -11,6 +11,9 @@ export default {
         brandLight: "#DBEAFE",  // الأزرق الفاتح
         brandGray: "#F3F4F6"    // الرمادي الفاتح للخلفيات
       },
+      fontFamily: {
+        tajawal: ['"Tajawal"', "sans-serif"],
+      },
     },
   },
   plugins: [],
